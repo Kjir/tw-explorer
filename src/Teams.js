@@ -5,14 +5,34 @@ export function Teams({ players, team }) {
   var num_format = new Intl.NumberFormat("en-CA");
   const heading = team.map(hero => <th key={hero}>{hero}</th>);
 
+  function adjustGP(currentGP, relics) {
+    if (relics <= 2) {
+      return currentGP;
+    }
+    const increments = [0, 759, 1594, 2505, 3492, 4554, 6072, 7969];
+    return currentGP + increments[relics - 2];
+  }
+
   const playerTeams = players
-    .filter(player => team.every(hero => player.hasOwnProperty(hero)))
+    .filter(player =>
+      team.every(hero =>
+        player.roster.some(playerHero => playerHero.defId === hero)
+      )
+    )
     .map(player => {
-      const heroes = team.map(hero => ({ ...player[hero][0], name: hero }));
+      const heroes = team.map(hero => {
+        const playerHero = player.roster.find(
+          playerHero => playerHero.defId === hero
+        );
+        return {
+          ...playerHero,
+          name: playerHero.defId,
+          gp: adjustGP(playerHero.gp, playerHero.relic.currentTier)
+        };
+      });
       return {
-        heroes,
-        name: Object.values(heroes)[0].player,
-        allyCode: Object.values(heroes)[0].allyCode,
+        ...player,
+        roster: heroes,
         team_gp: heroes.reduce((total, hero) => total + hero.gp, 0)
       };
     })
@@ -20,7 +40,7 @@ export function Teams({ players, team }) {
 
   function getPlayerRow(player, index) {
     const heroCells = [
-      ...player.heroes.map(hero => (
+      ...player.roster.map(hero => (
         <td key={hero.name + "-details"}>
           <Hero data={hero} />
         </td>
