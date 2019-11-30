@@ -3,7 +3,9 @@ import { Stars } from "./Stars";
 import "./Portrait.css";
 
 export function Portrait({ hero }) {
-  const zetaCount = hero.skills.filter(skill => skill.isZeta).length;
+  const zetaCount = hero.skills.filter(
+    skill => skill.isZeta && skill.tier === skill.tiers
+  ).length;
   const zetas = zetaCount > 0 ? <span className="zetas">{zetaCount}</span> : "";
   const relicCount = hero.relic.currentTier - 2;
   const relics =
