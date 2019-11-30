@@ -41,6 +41,13 @@
     "GEONOSIANSOLDIER",
     "GEONOSIANSPY"
   ],
+  "CLS": [
+    "COMMANDERLUKESKYWALKER",
+    "HANSOLO",
+    "CHEWBACCALEGENDARY",
+    "R2D2_LEGENDARY",
+    "C3POLEGENDARY"
+  ],
   "Nightsisters (Spirit)": [
     "ASAJVENTRESS",
     "MOTHERTALZIN",
