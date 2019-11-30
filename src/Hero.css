@@ -1,0 +1,5 @@
+.hero-badge {
+  background-color: bisque;
+  display: flex;
+  border-radius: 5px;
+}

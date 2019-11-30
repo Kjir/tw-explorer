@@ -1,0 +1,97 @@
+{
+  "Darth Revan": [
+    "DARTHREVAN",
+    "BASTILASHANDARK",
+    "SITHTROOPER",
+    "DARTHMALAK",
+    "HK47"
+  ],
+  "Jedi Knight Revan": [
+    "JEDIKNIGHTREVAN",
+    "GRANDMASTERYODA",
+    "BASTILASHAN",
+    "JOLEEBINDO",
+    "HERMITYODA"
+  ],
+  "Padme": [
+    "PADMEAMIDALA",
+    "GENERALKENOBI",
+    "ANAKINKNIGHT",
+    "AHSOKATANO",
+    "C3POLEGENDARY"
+  ],
+  "General Grievous": [
+    "GRIEVOUS",
+    "B2SUPERBATTLEDROID",
+    "B1BATTLEDROIDV2",
+    "MAGNAGUARD",
+    "DROIDEKA"
+  ],
+  "IG-88 Suicide Squad": [
+    "IG88",
+    "BB8",
+    "GRIEVOUS",
+    "IMPERIALPROBEDROID",
+    "T3_M4"
+  ],
+  "Geonosians": [
+    "GEONOSIANBROODALPHA",
+    "SUNFAC",
+    "POGGLETHELESSER",
+    "GEONOSIANSOLDIER",
+    "GEONOSIANSPY"
+  ],
+  "Nightsisters (Spirit)": [
+    "ASAJVENTRESS",
+    "MOTHERTALZIN",
+    "DAKA",
+    "NIGHTSISTERZOMBIE",
+    "NIGHTSISTERSPIRIT"
+  ],
+  "Nightsisters (Nest)": [
+    "ASAJVENTRESS",
+    "MOTHERTALZIN",
+    "DAKA",
+    "NIGHTSISTERZOMBIE",
+    "ENFYSNEST"
+  ],
+  "Bounty Hunters": ["BOSSK", "JANGOFETT", "BOBAFETT", "DENGAR", "CADBANE"],
+  "First Order": [
+    "KYLORENUNMASKED",
+    "KYLOREN",
+    "FIRSTORDERTROOPER",
+    "FIRSTORDEREXECUTIONER",
+    "FIRSTORDEROFFICERMALE"
+  ],
+  "Resistance": [
+    "REYJEDITRAINING",
+    "FINN",
+    "BB8",
+    "R2D2_LEGENDARY",
+    "C3POLEGENDARY"
+  ],
+  "Clones": ["SHAAKTI", "CT5555", "CT7567", "CT210408", "CLONESERGEANTPHASEI"],
+  "Clones (JKA)": ["SHAAKTI", "CT5555", "CT7567", "CT210408", "ANAKINKNIGHT"],
+  "Clones (Rex Lead)": [
+    "CT7567",
+    "CT5555",
+    "CT210408",
+    "CLONESERGEANTPHASEI",
+    "CC2224"
+  ],
+  "Ewoks": ["CHIEFCHIRPA", "EWOKELDER", "LOGRAY", "PAPLOO", "WICKET"],
+  "Old Republic": [
+    "CARTHONASI",
+    "ZAALBAR",
+    "MISSIONVAO",
+    "CANDEROUSORDO",
+    "JUHANI"
+  ],
+  "Phoenix": [
+    "HERASYNDULLAS3",
+    "EZRABRIDGERS3",
+    "KANANJARRUSS3",
+    "ZEBS3",
+    "CHOPPERS3"
+  ]
+}

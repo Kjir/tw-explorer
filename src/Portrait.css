@@ -1,0 +1,103 @@
+.portrait {
+  width: 92px;
+  height: 92px;
+  padding: 5px;
+  position: relative;
+}
+
+.portrait img {
+  border-radius: 50%;
+  margin-top: 14px;
+  width: 64px;
+  height: 64px;
+}
+
+.portrait .gear {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin-top: 14px;
+}
+
+.gear-1 {
+  background-image: url(https://swgoh.gg/static/img/ui/gear-icon-g1.svg);
+}
+
+.gear-2 {
+  background-image: url(https://swgoh.gg/static/img/ui/gear-icon-g2.svg);
+}
+
+.gear-3 {
+  background-image: url(https://swgoh.gg/static/img/ui/gear-icon-g3.svg);
+}
+.gear-4 {
+  background-image: url(https://swgoh.gg/static/img/ui/gear-icon-g4.svg);
+}
+.gear-5 {
+  background-image: url(https://swgoh.gg/static/img/ui/gear-icon-g5.svg);
+}
+.gear-6 {
+  background-image: url(https://swgoh.gg/static/img/ui/gear-icon-g6.svg);
+}
+.gear-7 {
+  background-image: url(https://swgoh.gg/static/img/ui/gear-icon-g7.svg);
+}
+.gear-8 {
+  background-image: url(https://swgoh.gg/static/img/ui/gear-icon-g8.svg);
+}
+.gear-9 {
+  background-image: url(https://swgoh.gg/static/img/ui/gear-icon-g9.svg);
+}
+.gear-10 {
+  background-image: url(https://swgoh.gg/static/img/ui/gear-icon-g10.svg);
+}
+.gear-11 {
+  background-image: url(https://swgoh.gg/static/img/ui/gear-icon-g11.svg);
+}
+.gear-12 {
+  background-image: url(https://swgoh.gg/static/img/ui/gear-icon-g12.svg);
+}
+.gear-13 {
+  background-image: url(https://swgoh.gg/static/img/ui/gear-icon-g13.svg);
+}
+
+.zetas {
+  background: no-repeat center
+    url(https://swgoh.gg/static/img/assets/tex.skill_zeta_glow.png);
+  background-size: contain;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  color: white;
+  position: absolute;
+  left: 16%;
+  top: 60px;
+  font-size: 8px;
+  text-shadow: -1px -1px 0 #7028c9, 2px -1px 0 #7028c9, 2px 2px 0 #7028c9,
+    -1px 2px 0 #7028c9, 2px 3px 0 #7028c9, 1px 3px 0 #7028c9, 2px 3px 0 #7028c9;
+  font-weight: 700;
+  text-align: center;
+  line-height: 24px;
+}
+
+.level {
+  position: absolute;
+  top: 71px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 100%/130% 130% 15px 15px;
+  border: 2px solid white;
+  font-size: 8px;
+  font-weight: 700;
+  background-color: #264257;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: -1px -1px 0 #000, 2px -1px 0 #000, 2px 2px 0 #000,
+    -1px 2px 0 #000, 2px 3px 0 #000, 1px 3px 0 #000, 2px 3px 0 #000;
+  color: white;
+  width: 22px;
+  padding: 0 5px;
+  line-height: 16px;
+  box-sizing: border-box;
+  letter-spacing: 0;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}

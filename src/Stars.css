@@ -1,0 +1,46 @@
+.stars {
+  position: absolute;
+  width: 14px;
+  height: 92px;
+  left: 50%;
+}
+.star {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url(https://swgoh.gg/static/img/star-inactive.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position-x: 50%;
+}
+.star.active {
+  background-image: url(https://swgoh.gg/static/img/star.png);
+}
+
+.star-1 {
+  transform: translateX(-50%) rotate(-60deg);
+}
+
+.star-2 {
+  transform: translateX(-50%) rotate(-40deg);
+}
+
+.star-3 {
+  transform: translateX(-50%) rotate(-20deg);
+}
+
+.star-4 {
+  transform: translateX(-50%) rotate(0deg);
+}
+
+.star-5 {
+  transform: translateX(-50%) rotate(20deg);
+}
+
+.star-6 {
+  transform: translateX(-50%) rotate(40deg);
+}
+
+.star-7 {
+  transform: translateX(-50%) rotate(60deg);
+}
