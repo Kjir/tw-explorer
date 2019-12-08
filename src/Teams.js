@@ -1,31 +1,56 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Hero } from "./Hero.js";
 
-export function Teams({ players, team }) {
-  var num_format = new Intl.NumberFormat("en-CA");
-  const heading = team.map(hero => <th key={hero}>{hero}</th>);
-
-  function adjustGP(currentGP, relics) {
-    if (relics <= 2) {
-      return currentGP;
+async function getTeamStats(playerTeams) {
+  const heroes = playerTeams.flatMap(player => player.roster);
+  const response = await fetch(
+    "https://crinolo-swgoh.glitch.me/statCalc/api/characters",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(heroes)
     }
-    const increments = [0, 759, 1594, 2505, 3492, 4554, 6072, 7969];
-    return currentGP + increments[relics - 2];
-  }
+  );
+  const heroesWithStats = await response.json();
+  return heroesWithStats.reduce((heroesMap, currentHero) => {
+    return { ...heroesMap, [currentHero.id]: currentHero };
+  }, {});
+}
 
-  const playerTeams = players
+function adjustGP(currentGP, relics) {
+  if (relics <= 2) {
+    return currentGP;
+  }
+  const increments = [0, 759, 1594, 2505, 3492, 4554, 6072, 7969];
+  return currentGP + increments[relics - 2];
+}
+
+function getPlayersWithTeam(players, team) {
+  return players
     .filter(player =>
       team.every(hero =>
         player.roster.some(playerHero => playerHero.defId === hero)
       )
     )
     .map(player => {
+      return {
+        ...player,
+        roster: team.map(hero =>
+          player.roster.find(playerHero => playerHero.defId === hero)
+        )
+      };
+    });
+}
+
+function getSortedPlayers(players, team, heroStats = {}) {
+  return players
+    .map(player => {
       const heroes = team.map(hero => {
         const playerHero = player.roster.find(
           playerHero => playerHero.defId === hero
         );
         return {
-          ...playerHero,
+          ...(heroStats[playerHero.id] || playerHero),
           name: playerHero.defId,
           gp: adjustGP(playerHero.gp, playerHero.relic.currentTier)
         };
@@ -37,6 +62,23 @@ export function Teams({ players, team }) {
       };
     })
     .sort((player1, player2) => player2.team_gp - player1.team_gp);
+}
+
+async function enrichPlayerTeams(players, team, setPlayerTeams) {
+  const playersWithTeam = getPlayersWithTeam(players, team);
+  setPlayerTeams(getSortedPlayers(playersWithTeam, team));
+  const heroStats = await getTeamStats(playersWithTeam);
+  setPlayerTeams(getSortedPlayers(playersWithTeam, team, heroStats));
+}
+
+export function Teams({ players, team }) {
+  var num_format = new Intl.NumberFormat("en-CA");
+  const heading = team.map(hero => <th key={hero}>{hero}</th>);
+
+  const [playerTeams, setPlayerTeams] = useState([]);
+  useEffect(() => {
+    enrichPlayerTeams(players, team, setPlayerTeams);
+  }, [players, team]);
 
   function getPlayerRow(player, index) {
     const heroCells = [

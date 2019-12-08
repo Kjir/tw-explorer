@@ -3,3 +3,25 @@
   display: flex;
   border-radius: 5px;
 }
+
+.hero-badge dl {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+
+.hero-badge dt,
+.hero-badge dd {
+  flex: 1 0 auto;
+  width: 45%;
+  margin: 0;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+.hero-badge dt {
+  text-transform: uppercase;
+  background-color: brown;
+  border: 2px solid aquamarine;
+  font-weight: bold;
+}
