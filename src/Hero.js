@@ -4,10 +4,7 @@ import { Portrait } from "./Portrait.js";
 
 function getStat(stats, statName) {
   if (!stats) return null;
-  const baseStat = stats.base[statName];
-  const modStat = (stats.mods ? stats.mods[statName] : 0) || 0;
-  const gearStat = (stats.gear ? stats.gear[statName] : 0) || 0;
-  return baseStat + modStat + gearStat;
+  return stats.final[statName];
 }
 
 function getSpeed({ stats }) {
@@ -28,7 +25,7 @@ export function Hero({ data: hero }) {
         <dt>GP</dt>
         <dd>{num_format.format(hero.gp)}</dd>
         <dt>Speed</dt>
-        <dd>{getSpeed(hero)}</dd>
+        <dd>{num_format.format(getSpeed(hero))}</dd>
         <dt>Health</dt>
         <dd>{num_format.format(getHealth(hero))}</dd>
       </dl>

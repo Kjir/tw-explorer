@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Hero } from "./Hero.js";
+import gameData from "./gameData.json";
+import statsCalculator from "swgoh-stat-calc";
+import statsTranslations from "./eng_us.json";
+
+statsCalculator.setGameData(gameData);
 
 async function getTeamStats(playerTeams) {
-  const heroes = playerTeams.flatMap(player => player.roster);
-  const response = await fetch(
-    "https://crinolo-swgoh.glitch.me/statCalc/api/characters",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(heroes)
-    }
-  );
-  const heroesWithStats = await response.json();
-  return heroesWithStats.reduce((heroesMap, currentHero) => {
+  let heroes = playerTeams.flatMap(player => player.roster);
+  statsCalculator.calcRosterStats(heroes, {
+    gameStyle: true,
+    language: statsTranslations
+  });
+  return heroes.reduce((heroesMap, currentHero) => {
     return { ...heroesMap, [currentHero.id]: currentHero };
   }, {});
 }
@@ -27,10 +27,12 @@ function adjustGP(currentGP, relics) {
 
 function getPlayersWithTeam(players, team) {
   return players
-    .filter(player =>
-      team.every(hero =>
-        player.roster.some(playerHero => playerHero.defId === hero)
-      )
+    .filter(
+      player =>
+        player &&
+        team.every(hero =>
+          player.roster.some(playerHero => playerHero.defId === hero)
+        )
     )
     .map(player => {
       return {
