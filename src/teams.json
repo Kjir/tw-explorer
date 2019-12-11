@@ -2,7 +2,7 @@
   "Darth Revan": [
     "DARTHREVAN",
     "BASTILASHANDARK",
-    "SITHTROOPER",
+    ["SITHTROOPER", "SITHMARAUDER"],
     "DARTHMALAK",
     "HK47"
   ],
@@ -11,7 +11,7 @@
     "GRANDMASTERYODA",
     "BASTILASHAN",
     "JOLEEBINDO",
-    "HERMITYODA"
+    ["HERMITYODA", "GENERALKENOBI", "EZRABRIDGERS3", "AHSOKATANO"]
   ],
   "Padme": [
     "PADMEAMIDALA",
@@ -48,21 +48,20 @@
     "R2D2_LEGENDARY",
     "C3POLEGENDARY"
   ],
-  "Nightsisters (Spirit)": [
+  "Nightsisters": [
     "ASAJVENTRESS",
     "MOTHERTALZIN",
     "DAKA",
     "NIGHTSISTERZOMBIE",
-    "NIGHTSISTERSPIRIT"
+    ["NIGHTSISTERSPIRIT", "ENFYSNEST", "NIGHTSISTERACOLYTE"]
   ],
-  "Nightsisters (Nest)": [
-    "ASAJVENTRESS",
-    "MOTHERTALZIN",
-    "DAKA",
-    "NIGHTSISTERZOMBIE",
-    "ENFYSNEST"
+  "Bounty Hunters": [
+    "BOSSK",
+    ["JANGOFETT", "GREEDO"],
+    "BOBAFETT",
+    "DENGAR",
+    "CADBANE"
   ],
-  "Bounty Hunters": ["BOSSK", "JANGOFETT", "BOBAFETT", "DENGAR", "CADBANE"],
   "First Order": [
     "KYLORENUNMASKED",
     "KYLOREN",
@@ -77,8 +76,13 @@
     "R2D2_LEGENDARY",
     "C3POLEGENDARY"
   ],
-  "Clones": ["SHAAKTI", "CT5555", "CT7567", "CT210408", "CLONESERGEANTPHASEI"],
-  "Clones (JKA)": ["SHAAKTI", "CT5555", "CT7567", "CT210408", "ANAKINKNIGHT"],
+  "Clones": [
+    "SHAAKTI",
+    "CT5555",
+    "CT7567",
+    "CT210408",
+    ["ANAKINKNIGHT", "CLONESERGEANTPHASEI", "CC2224"]
+  ],
   "Clones (Rex Lead)": [
     "CT7567",
     "CT5555",

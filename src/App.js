@@ -3,12 +3,21 @@ import "./App.css";
 import { Teams } from "./Teams.js";
 import teams from "./teams.json";
 
+function throttledFetch(url, index, options = {}) {
+  if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
+    return fetch(url, options);
+  }
+  return new Promise(resolve =>
+    setTimeout(() => fetch(url, options).then(resolve), index * 700)
+  );
+}
 async function fetchGuildInfo(allyCode, setRoster, setFetching) {
   if (!allyCode || allyCode.length < 9) return [];
   saveLastAllyCode(allyCode);
   setFetching(`guild ${allyCode}`);
-  const response = await fetch(
+  const response = await throttledFetch(
     `https://api.swgoh.help/swgoh/guild/${allyCode}`,
+    0,
     { method: "GET" }
   );
   const guild = (await response.json())[0];
@@ -16,17 +25,16 @@ async function fetchGuildInfo(allyCode, setRoster, setFetching) {
   setRoster([]);
 
   guild.roster.forEach((player, index, { length }) => {
-    fetch(`https://api.swgoh.help/swgoh/player/${player.allyCode}`)
+    throttledFetch(
+      `https://api.swgoh.help/swgoh/player/${player.allyCode}`,
+      index
+    )
       .then(response => {
         setFetching(`player ${player.name} (${index + 1}/${length})`);
         return response;
       })
       .then(response => response.json())
-      .then(player => setRoster(r => [...r, player[0]]))
-      .catch(error => {
-        console.error("failed HTTP request", error);
-        throw error;
-      });
+      .then(player => setRoster(r => [...r, player[0]]));
   });
 
   return guild;

@@ -25,21 +25,40 @@ function adjustGP(currentGP, relics) {
   return currentGP + increments[relics - 2];
 }
 
+function getBestHero(heroes, playerRoster) {
+  const availableHeroes = playerRoster.filter(playerHero =>
+    heroes.includes(playerHero.defId)
+  );
+  return availableHeroes.sort(
+    (h1, h2) =>
+      adjustGP(h2.gp, h2.relic.currentTier) -
+      adjustGP(h1.gp, h1.relic.currentTier)
+  )[0];
+}
+
 function getPlayersWithTeam(players, team) {
   return players
     .filter(
       player =>
         player &&
         team.every(hero =>
-          player.roster.some(playerHero => playerHero.defId === hero)
+          player.roster.some(playerHero =>
+            Array.isArray(hero)
+              ? hero.includes(playerHero.defId)
+              : playerHero.defId === hero
+          )
         )
     )
     .map(player => {
       return {
         ...player,
-        roster: team.map(hero =>
-          player.roster.find(playerHero => playerHero.defId === hero)
-        )
+        roster: team.map(hero => {
+          if (Array.isArray(hero)) {
+            return getBestHero(hero, player.roster);
+          } else {
+            return player.roster.find(playerHero => playerHero.defId === hero);
+          }
+        })
       };
     });
 }
@@ -48,8 +67,10 @@ function getSortedPlayers(players, team, heroStats = {}) {
   return players
     .map(player => {
       const heroes = team.map(hero => {
-        const playerHero = player.roster.find(
-          playerHero => playerHero.defId === hero
+        const playerHero = player.roster.find(playerHero =>
+          Array.isArray(hero)
+            ? hero.includes(playerHero.defId)
+            : playerHero.defId === hero
         );
         return {
           ...(heroStats[playerHero.id] || playerHero),
@@ -75,7 +96,13 @@ async function enrichPlayerTeams(players, team, setPlayerTeams) {
 
 export function Teams({ players, team }) {
   var num_format = new Intl.NumberFormat("en-CA");
-  const heading = team.map(hero => <th key={hero}>{hero}</th>);
+  const heading = team.map(hero =>
+    Array.isArray(hero) ? (
+      <th key={hero.join("-")}>{hero.join("/")}</th>
+    ) : (
+      <th key={hero}>{hero}</th>
+    )
+  );
 
   const [playerTeams, setPlayerTeams] = useState([]);
   useEffect(() => {
