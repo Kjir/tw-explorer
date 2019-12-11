@@ -15,7 +15,7 @@ export function Portrait({ hero }) {
       <span className={`gear gear-${hero.gear}`}></span>
       <Stars stars={hero.rarity}></Stars>
       <img
-        src={`https://www.swgoh.gg/game-asset/u/${hero.name}/`}
+        src={`https://swgoh.gg/game-asset/u/${hero.name}/`}
         alt={hero.name}
       />
       {zetas}

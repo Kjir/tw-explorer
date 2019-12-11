@@ -11,18 +11,22 @@ async function fetchGuildInfo(allyCode, setRoster, setFetching) {
     { method: "GET" }
   );
   const guild = (await response.json())[0];
+  setFetching(`players`);
   setRoster([]);
 
-  guild.roster.reduce((delay, player, index, { length }) => {
-    function fetchPlayer() {
-      setFetching(`player ${player.name} (${index + 1}/${length})`);
-      fetch(`https://api.swgoh.help/swgoh/player/${player.allyCode}`)
-        .then(response => response.json())
-        .then(player => setRoster(r => [...r, player[0]]));
-    }
-    setTimeout(fetchPlayer, delay);
-    return delay + 700;
-  }, 700);
+  guild.roster.forEach((player, index, { length }) => {
+    fetch(`https://api.swgoh.help/swgoh/player/${player.allyCode}`)
+      .then(response => {
+        setFetching(`player ${player.name} (${index + 1}/${length})`);
+        return response;
+      })
+      .then(response => response.json())
+      .then(player => setRoster(r => [...r, player[0]]))
+      .catch(error => {
+        console.error("failed HTTP request", error);
+        throw error;
+      });
+  });
 
   return guild;
 }
@@ -49,8 +53,16 @@ function App() {
   }
 
   function updateGuild(event) {
+    if (!event.target) {
+      return;
+    }
     setGuild(g => ({ ...g, allyCode: event.target.value }));
   }
+
+  var num_format = new Intl.NumberFormat("en-CA");
+  const guildName = guild.name
+    ? `${guild.name} (${num_format.format(guild.gp)})`
+    : "";
 
   const teamSelector = Object.keys(teams).map(team => (
     <li key={team}>
@@ -74,7 +86,7 @@ function App() {
         {fetchingMessage}
       </section>
       <section>
-        <h1>{guild.name}</h1>
+        <h1>{guildName}</h1>
         <h3>Select team</h3>
         <ul className="teamSelector">{teamSelector}</ul>
       </section>
