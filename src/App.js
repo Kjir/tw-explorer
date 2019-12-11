@@ -5,6 +5,7 @@ import teams from "./teams.json";
 
 async function fetchGuildInfo(allyCode, setRoster, setFetching) {
   if (!allyCode || allyCode.length < 9) return [];
+  saveLastAllyCode(allyCode);
   setFetching(`guild ${allyCode}`);
   const response = await fetch(
     `https://api.swgoh.help/swgoh/guild/${allyCode}`,
@@ -31,10 +32,53 @@ async function fetchGuildInfo(allyCode, setRoster, setFetching) {
   return guild;
 }
 
+function storageAvailable(type) {
+  var storage;
+  try {
+    storage = window[type];
+    var x = "__storage_test__";
+    storage.setItem(x, x);
+    storage.removeItem(x);
+    return true;
+  } catch (e) {
+    return (
+      e instanceof DOMException &&
+      // everything except Firefox
+      (e.code === 22 ||
+        // Firefox
+        e.code === 1014 ||
+        // test name field too, because code might not be present
+        // everything except Firefox
+        e.name === "QuotaExceededError" ||
+        // Firefox
+        e.name === "NS_ERROR_DOM_QUOTA_REACHED") &&
+      // acknowledge QuotaExceededError only if there's something already stored
+      storage &&
+      storage.length !== 0
+    );
+  }
+}
+
+function getLastAllyCode() {
+  if (!storageAvailable("localStorage")) {
+    return "";
+  }
+
+  return window.localStorage.getItem("lastAllyCode") || "";
+}
+
+function saveLastAllyCode(allyCode) {
+  if (!storageAvailable("localStorage")) {
+    return;
+  }
+
+  window.localStorage.setItem("lastAllyCode", allyCode);
+}
+
 function App() {
   const [currentTeam, setTeam] = useState(Object.keys(teams)[0]);
   const [roster, setRoster] = useState([]);
-  const [guild, setGuild] = useState({ allyCode: "" });
+  const [guild, setGuild] = useState({ allyCode: getLastAllyCode() });
   const [fetching, setFetching] = useState(null);
 
   useEffect(() => {
