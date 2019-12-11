@@ -59,6 +59,12 @@ function App() {
     setGuild(g => ({ ...g, allyCode: event.target.value }));
   }
 
+  function clearCache() {
+    if (window.confirm("Are you sure you want to clear the cache?")) {
+      fetch("/cache/clear");
+    }
+  }
+
   var num_format = new Intl.NumberFormat("en-CA");
   const guildName = guild.name
     ? `${guild.name} (${num_format.format(guild.gp)})`
@@ -83,6 +89,7 @@ function App() {
         <h3>Ally code</h3>
         <input type="text" value={guild.allyCode} onChange={updateGuild} />
         <button onClick={fetchRoster}>Fetch</button>
+        <button onClick={clearCache}>Clear cache</button>
         {fetchingMessage}
       </section>
       <section>

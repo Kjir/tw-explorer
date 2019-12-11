@@ -25,15 +25,16 @@ self.addEventListener("fetch", event => {
               .then(cache =>
                 cache.add(request).then(() => cache.match(request))
               )
-              .then(resolve)
-              .catch(error => {
-                throw error;
-              });
+              .then(resolve);
           }, waitTime);
         });
       });
 
     event.respondWith(findResponsePromise);
+  } else if (request.url.endsWith("/cache/clear")) {
+    event.respondWith(
+      caches.delete(CACHE_NAME).then(() => new Response("cache cleared"))
+    );
   } else {
     event.respondWith(fetch(request));
   }
