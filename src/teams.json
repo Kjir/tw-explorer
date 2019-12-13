@@ -53,7 +53,7 @@
     "ASAJVENTRESS",
     "MOTHERTALZIN",
     "DAKA",
-    "NIGHTSISTERZOMBIE",
+    { "defId": "NIGHTSISTERZOMBIE", "threshold": { "gearLevel": "10" } },
     ["NIGHTSISTERSPIRIT", "ENFYSNEST", "NIGHTSISTERACOLYTE"]
   ],
   "Bounty Hunters": [

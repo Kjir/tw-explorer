@@ -36,18 +36,34 @@ function getBestHero(heroes, playerRoster) {
   )[0];
 }
 
+function matchesThreshold(threshold, playerHero) {
+  if (!threshold) {
+    return true;
+  }
+
+  let matches = true;
+  if (threshold.gearLevel && playerHero.gear < threshold.gearLevel) {
+    matches = false;
+  }
+  return matches;
+}
+
+function isUsableHero(hero, playerHero) {
+  if (Array.isArray(hero)) {
+    return hero.includes(playerHero.defId);
+  }
+  if (hero.defId) {
+    return playerHero.defId === hero.defId;
+  }
+  return playerHero.defId === hero;
+}
+
 function getPlayersWithTeam(players, team) {
   return players
     .filter(
       player =>
         player &&
-        team.every(hero =>
-          player.roster.some(playerHero =>
-            Array.isArray(hero)
-              ? hero.includes(playerHero.defId)
-              : playerHero.defId === hero
-          )
-        )
+        team.every(hero => player.roster.some(isUsableHero.bind(null, hero)))
     )
     .map(player => {
       return {
@@ -56,7 +72,7 @@ function getPlayersWithTeam(players, team) {
           if (Array.isArray(hero)) {
             return getBestHero(hero, player.roster);
           } else {
-            return player.roster.find(playerHero => playerHero.defId === hero);
+            return player.roster.find(isUsableHero.bind(null, hero));
           }
         })
       };
@@ -67,15 +83,12 @@ function getSortedPlayers(players, team, heroStats = {}) {
   return players
     .map(player => {
       const heroes = team.map(hero => {
-        const playerHero = player.roster.find(playerHero =>
-          Array.isArray(hero)
-            ? hero.includes(playerHero.defId)
-            : playerHero.defId === hero
-        );
+        const playerHero = player.roster.find(isUsableHero.bind(null, hero));
         return {
           ...(heroStats[playerHero.id] || playerHero),
           name: playerHero.defId,
-          gp: adjustGP(playerHero.gp, playerHero.relic.currentTier)
+          gp: adjustGP(playerHero.gp, playerHero.relic.currentTier),
+          matchesThreshold: matchesThreshold(hero.threshold, playerHero)
         };
       });
       return {
@@ -100,7 +113,7 @@ export function Teams({ players, team }) {
     Array.isArray(hero) ? (
       <th key={hero.join("-")}>{hero.join("/")}</th>
     ) : (
-      <th key={hero}>{hero}</th>
+      <th key={hero}>{hero.defId ? hero.defId : hero}</th>
     )
   );
 
@@ -112,7 +125,10 @@ export function Teams({ players, team }) {
   function getPlayerRow(player, index) {
     const heroCells = [
       ...player.roster.map(hero => (
-        <td key={hero.name + "-details"}>
+        <td
+          key={hero.name + "-details"}
+          className={hero.matchesThreshold ? null : "incomplete"}
+        >
           <Hero data={hero} />
         </td>
       ))

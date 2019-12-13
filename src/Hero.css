@@ -4,6 +4,10 @@
   border-radius: 5px;
 }
 
+.incomplete .hero-badge {
+  background-color: sandybrown;
+}
+
 .hero-badge dl {
   display: flex;
   flex-wrap: wrap;
