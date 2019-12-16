@@ -37,15 +37,18 @@ function getBestHero(heroes, playerRoster) {
 }
 
 function matchesThreshold(threshold, playerHero) {
+  if (playerHero.gp < 6000) {
+    return false;
+  }
+
   if (!threshold) {
     return true;
   }
 
-  let matches = true;
   if (threshold.gearLevel && playerHero.gear < threshold.gearLevel) {
-    matches = false;
+    return false;
   }
-  return matches;
+  return true;
 }
 
 function isUsableHero(hero, playerHero) {
