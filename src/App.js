@@ -139,7 +139,7 @@ function App() {
       <header className="App-header">Teams lists</header>
       <section>
         <h3>Ally code</h3>
-        <input type="text" value={guild.allyCode} onChange={updateGuild} />
+        <input type="text" name="allyCode" value={guild.allyCode} onChange={updateGuild} />
         <button onClick={fetchRoster}>Fetch</button>
         <button onClick={clearCache}>Clear cache</button>
         {fetchingMessage}
