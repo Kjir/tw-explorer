@@ -13,6 +13,13 @@
     "JOLEEBINDO",
     ["HERMITYODA", "GENERALKENOBI", "EZRABRIDGERS3", "AHSOKATANO"]
   ],
+  "General Skywalker": [
+    { "defId": "GENERALSKYWALKER", "threshold": { "gearLevel":"13" } },
+    "CT7567",
+    "CT210408",
+    ["AHSOKATANO", "ARCTROOPER501ST"],
+    "CT5555"
+  ],
   "Padme": [
     "PADMEAMIDALA",
     "GENERALKENOBI",
@@ -27,12 +34,11 @@
     "MAGNAGUARD",
     "DROIDEKA"
   ],
-  "General Skywalker": [
-    { "defId": "GENERALSKYWALKER", "threshold": { "gearLevel":"13" } },
-    "CT7567",
-    "CT210408",
-    ["AHSOKATANO", "ARCTROOPER501ST"],
-    "CT5555"
+  "Separatist Might": [
+      "NUTEGUNRAY",
+      "COUNTDOOKU",
+      "JANGOFETT",
+      "WATTAMBOR"
   ],
   "Geonosians": [
     "GEONOSIANBROODALPHA",
@@ -57,18 +63,18 @@
     ["NIGHTSISTERSPIRIT", "ENFYSNEST", "NIGHTSISTERACOLYTE"]
   ],
   "Bounty Hunters": [
+    "JANGOFETT",
     "BOSSK",
-    ["JANGOFETT", "GREEDO"],
     "BOBAFETT",
     "DENGAR",
-    "CADBANE"
+    ["CADBANE", "GREEDO", "AURRA_SING", "EMBO"]
   ],
   "First Order": [
     "KYLORENUNMASKED",
     "KYLOREN",
     "FIRSTORDERTROOPER",
     "FIRSTORDEREXECUTIONER",
-    "FIRSTORDEROFFICERMALE"
+    ["FOSITHTROOPER", "FIRSTORDEROFFICERMALE"]
   ],
   "Resistance": [
     "REYJEDITRAINING",
@@ -82,7 +88,7 @@
     "CT5555",
     "CT7567",
     "CT210408",
-    ["ANAKINKNIGHT", "CLONESERGEANTPHASEI", "CC2224", "ARCTROOPER501ST"]
+    ["CLONESERGEANTPHASEI", "CC2224", "ARCTROOPER501ST"]
   ],
   "Clones (Rex Lead)": [
     "CT7567",
@@ -98,12 +104,5 @@
     "MISSIONVAO",
     "CANDEROUSORDO",
     "JUHANI"
-  ],
-  "Phoenix": [
-    "HERASYNDULLAS3",
-    "EZRABRIDGERS3",
-    "KANANJARRUSS3",
-    "ZEBS3",
-    "CHOPPERS3"
   ]
 }
