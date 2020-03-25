@@ -27,12 +27,12 @@
     "MAGNAGUARD",
     "DROIDEKA"
   ],
-  "IG-88 Suicide Squad": [
-    "IG88",
-    "BB8",
-    "GRIEVOUS",
-    "IMPERIALPROBEDROID",
-    "T3_M4"
+  "General Skywalker": [
+    { "defId": "GENERALSKYWALKER", "threshold": { "gearLevel":"13" } },
+    "CT7567",
+    "CT210408",
+    ["AHSOKATANO", "ARCTROOPER501ST"],
+    "CT5555"
   ],
   "Geonosians": [
     "GEONOSIANBROODALPHA",
