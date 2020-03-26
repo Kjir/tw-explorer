@@ -104,5 +104,12 @@
     "MISSIONVAO",
     "CANDEROUSORDO",
     "JUHANI"
+  ],
+  "Scoundrels": [
+    "QIRA",
+    "YOUNGCHEWBACCA",
+    "L3_37",
+    "ZAALBAR",
+    ["MISSIONVAO", "YOUNGHAN", "ENFYSNEST"]
   ]
 }
