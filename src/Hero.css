@@ -1,17 +1,16 @@
 .hero-badge {
-  background-color: bisque;
   display: flex;
-  border-radius: 5px;
 }
 
 .incomplete .hero-badge {
-  background-color: sandybrown;
+  background-color: #cc3f0c;
 }
 
 .hero-badge dl {
   display: flex;
   flex-wrap: wrap;
   font-size: 12px;
+  height: 92px;
 }
 
 .hero-badge dt,
@@ -25,7 +24,7 @@
 
 .hero-badge dt {
   text-transform: uppercase;
-  background-color: brown;
-  border: 2px solid aquamarine;
+  background-color: #2673ad;
+  border: 2px solid #80cfa9;
   font-weight: bold;
 }

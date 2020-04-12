@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./Teams.css";
 import { Hero } from "./Hero.js";
 import gameData from "./gameData.json";
 import statsCalculator from "swgoh-stat-calc";
@@ -175,10 +176,9 @@ export function Teams({ players, team, requiredGP }) {
 
   return (
     <section>
-      <h4>Matching teams</h4>
-      <h5>
-        {getMatchingTeams().length}/{playerTeams.length}
-      </h5>
+      <h4>
+        Matching teams {getMatchingTeams().length}/{playerTeams.length}
+      </h4>
       <table>
         <thead>
           <tr key={"matching"}>
@@ -190,10 +190,9 @@ export function Teams({ players, team, requiredGP }) {
         </thead>
         <tbody>{getMatchingTeams().map(getPlayerRow)}</tbody>
       </table>
-      <h4>Other teams</h4>
-      <h5>
-        {getOtherTeams().length}/{playerTeams.length}
-      </h5>
+      <h4>
+        Other teams {getOtherTeams().length}/{playerTeams.length}
+      </h4>
       <table>
         <thead>
           <tr key={"unmatching"}>

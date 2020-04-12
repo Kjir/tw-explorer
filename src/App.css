@@ -1,5 +1,7 @@
 .App {
-  text-align: center;
+  background-color: #282c34;
+  color:#f3f3f3;
+  padding: 50px;
 }
 
 .App-logo {
@@ -7,13 +9,37 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #2673ad;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+}
+
+.App h2,
+.App h3,
+.App h4,
+.App h5,
+.App h6 {
+  font-size: larger;
+  border-bottom: 3px #80cfa9 solid;
+  width: 25%;
+}
+
+.App input,
+.App button {
+  background-color: #2673ad;
+  color: #f3f3f3;
+  font-size: 16px;
+  font-weight: bold;
+  border: 3px solid #a7e2e3;
+  padding: 0.3rem;
+  margin: 1rem;
+}
+
+.App input:focus {
+  background-color: #74a5ca;
 }
 
 .App-link {
@@ -35,13 +61,14 @@
 }
 .teamSelector button {
   width: 100%;
-  border: 2px solid blueviolet;
-  background-color: beige;
+  border: 2px solid #a7e2e3;
+  background-color: #2673ad;
   border-radius: 4px;
   padding: 10px;
 }
 .teamSelector button.active {
-  background-color: cornflowerblue;
+  background-color: #74a5ca;
+  border-color: #80cfa9;
 }
 
 .gp-range {

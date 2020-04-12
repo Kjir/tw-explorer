@@ -1,13 +1,18 @@
 .portrait {
-  width: 150px;
+  background-color: #2673ad;
+  border: 2px solid #80cfa9;
+  border-radius: 10px;
+  width: 92px;
   height: 92px;
+  margin: 5px;
   padding: 5px;
   position: relative;
+  flex: 0 0 auto;
 }
 
 .portrait img {
   border-radius: 50%;
-  margin-top: 14px;
+  margin: 15px;
   width: 64px;
   height: 64px;
 }
@@ -16,7 +21,7 @@
   position: absolute;
   width: 64px;
   height: 64px;
-  margin-top: 14px;
+  margin: 15px;
 }
 
 .gear-1 {
@@ -115,6 +120,7 @@
   line-height: 32px;
   position: absolute;
   top: 60px;
-  right: 12%;
+  right: 10%;
   background-position: 0 -200%;
+  text-align: center;
 }

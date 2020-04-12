@@ -7,11 +7,11 @@ function throttledFetch(url, index, options = {}) {
   if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
     return fetch(url, options);
   }
-  return new Promise(resolve =>
+  return new Promise((resolve) =>
     setTimeout(() => fetch(url, options).then(resolve), index * 700)
   );
 }
-async function fetchGuildInfo(allyCode, setRoster, setFetching) {
+async function fetchGuildInfo(allyCode, setRoster, setFetching, setFetched) {
   if (!allyCode || allyCode.length < 9) return [];
   saveLastAllyCode(allyCode);
   setFetching(`guild ${allyCode}`);
@@ -22,6 +22,7 @@ async function fetchGuildInfo(allyCode, setRoster, setFetching) {
   );
   const guild = (await response.json())[0] || {};
   setFetching(`players`);
+  setFetched(0);
   setRoster([]);
 
   guild.roster.forEach((player, index, { length }) => {
@@ -29,12 +30,15 @@ async function fetchGuildInfo(allyCode, setRoster, setFetching) {
       `https://api.swgoh.help/swgoh/player/${player.allyCode}`,
       index
     )
-      .then(response => {
+      .then((response) => {
         setFetching(`player ${player.name} (${index + 1}/${length})`);
+        setFetched((n) => {
+          return n + 1;
+        });
         return response;
       })
-      .then(response => response.json())
-      .then(player => setRoster(r => [...r, player[0]]));
+      .then((response) => response.json())
+      .then((player) => setRoster((r) => [...r, player[0]]));
   });
 
   return guild;
@@ -88,6 +92,7 @@ function App() {
   const [roster, setRoster] = useState([]);
   const [guild, setGuild] = useState({ allyCode: getLastAllyCode() });
   const [fetching, setFetching] = useState(null);
+  const [fetched, setFetched] = useState(1);
   const [requiredGP, setRequiredGP] = useState(80000);
 
   useEffect(() => {
@@ -100,9 +105,12 @@ function App() {
   }, [guild, roster]);
 
   function fetchRoster() {
-    fetchGuildInfo(guild.allyCode, setRoster, setFetching).then(newGuild =>
-      setGuild(g => ({ ...g, ...newGuild }))
-    );
+    fetchGuildInfo(
+      guild.allyCode,
+      setRoster,
+      setFetching,
+      setFetched
+    ).then((newGuild) => setGuild((g) => ({ ...g, ...newGuild })));
   }
 
   function updateGuild(event) {
@@ -110,7 +118,7 @@ function App() {
       return;
     }
     var allyCode = event.target.value;
-    setGuild(g => ({ ...g, allyCode: allyCode }));
+    setGuild((g) => ({ ...g, allyCode: allyCode }));
   }
 
   function clearCache() {
@@ -125,7 +133,6 @@ function App() {
     }
     var gp = +event.target.value;
     setRequiredGP(gp);
-    
   }
 
   var num_format = new Intl.NumberFormat("en-CA");
@@ -133,7 +140,7 @@ function App() {
     ? `${guild.name} (${num_format.format(guild.gp)})`
     : "";
 
-  const teamSelector = Object.keys(teams).map(team => (
+  const teamSelector = Object.keys(teams).map((team) => (
     <li key={team}>
       <button
         className={currentTeam === team ? "active" : ""}
@@ -144,13 +151,24 @@ function App() {
     </li>
   ));
 
-  const fetchingMessage = fetching ? <div>Fetching {fetching}</div> : null;
+  const fetchingMessage = fetching ? (
+    <progress max={guild && guild.members ? guild.members : 50} value={fetched}>
+      Fetching {fetching}
+    </progress>
+  ) : null;
   return (
     <div className="App">
-      <header className="App-header">Teams lists</header>
+      <header className="App-header">
+        <h1>Territory Wars: Team Explorer</h1>
+      </header>
       <section>
         <h3>Ally code</h3>
-        <input type="text" name="allyCode" value={guild.allyCode} onChange={updateGuild} />
+        <input
+          type="text"
+          name="allyCode"
+          value={guild.allyCode}
+          onChange={updateGuild}
+        />
         <button onClick={fetchRoster}>Fetch</button>
         <button onClick={clearCache}>Clear cache</button>
         {fetchingMessage}
@@ -161,11 +179,22 @@ function App() {
         <ul className="teamSelector">{teamSelector}</ul>
       </section>
       <section>
-        <h3>Minimum GP</h3>
-        <h4>{requiredGP}</h4>
-        <input type="range" min="50000" max="150000" value={requiredGP} step="1000" className="gp-range" onChange={updateRequiredGP}/>
+        <h3>Minimum GP: {num_format.format(requiredGP)}</h3>
+        <input
+          type="range"
+          min="50000"
+          max="150000"
+          value={requiredGP}
+          step="1000"
+          className="gp-range"
+          onChange={updateRequiredGP}
+        />
       </section>
-      <Teams players={roster} team={teams[currentTeam]} requiredGP={requiredGP}></Teams>
+      <Teams
+        players={roster}
+        team={teams[currentTeam]}
+        requiredGP={requiredGP}
+      ></Teams>
     </div>
   );
 }

@@ -1,0 +1,14 @@
+table {
+  width: 100%;
+  color: #000;
+}
+
+thead {
+  background-color: #2673ad;
+}
+th {
+  border: 2px solid #80cfa9;
+}
+td {
+  background-color: #74a5ca;
+}
