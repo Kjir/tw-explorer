@@ -14,7 +14,7 @@
     ["HERMITYODA", "GENERALKENOBI", "EZRABRIDGERS3", "AHSOKATANO"]
   ],
   "General Skywalker": [
-    { "defId": "GENERALSKYWALKER", "threshold": { "gearLevel":"13" } },
+    { "defId": "GENERALSKYWALKER", "threshold": { "gearLevel": "13" } },
     "CT7567",
     "CT210408",
     ["AHSOKATANO", "ARCTROOPER501ST"],
@@ -28,26 +28,42 @@
     "C3POLEGENDARY"
   ],
   "General Grievous": [
-    "GRIEVOUS",
-    "B2SUPERBATTLEDROID",
-    "B1BATTLEDROIDV2",
+    {
+      "defId": "GRIEVOUS",
+      "threshold": {
+        "zetas": ["leaderskill_GRIEVOUS", "uniqueskill_GRIEVOUS01"]
+      }
+    },
+    {
+      "defId": "B2SUPERBATTLEDROID",
+      "threshold": { "zetas": ["uniqueskill_B2SUPERBATTLEDROID02"] }
+    },
+    {
+      "defId": "B1BATTLEDROIDV2",
+      "threshold": { "zetas": ["uniqueskill_b1battledroidv2_02"] }
+    },
     "MAGNAGUARD",
     "DROIDEKA"
   ],
-  "Separatist Might": [
-      "NUTEGUNRAY",
-      "COUNTDOOKU",
-      "JANGOFETT",
-      "WATTAMBOR"
-  ],
+  "Separatist Might": ["NUTEGUNRAY", "COUNTDOOKU", "JANGOFETT", "WATTAMBOR"],
   "Geonosians": [
-    "GEONOSIANBROODALPHA",
+    {
+      "defId": "GEONOSIANBROODALPHA",
+      "threshold": { "zetas": ["uniqueskill_GEONOSIANBROODALPHA01"] }
+    },
     "SUNFAC",
     "POGGLETHELESSER",
     "GEONOSIANSOLDIER",
     "GEONOSIANSPY"
   ],
-  "Triumvirate": ["DARTHTRAYA", "DARTHSION", "DARTHNIHILUS"],
+  "Triumvirate": [
+    {
+      "defId": "DARTHTRAYA",
+      "threshold": { "zetas": ["leaderskill_DARTHTRAYA"] }
+    },
+    "DARTHSION",
+    "DARTHNIHILUS"
+  ],
   "CLS": [
     "COMMANDERLUKESKYWALKER",
     "HANSOLO",
@@ -56,21 +72,30 @@
     "C3POLEGENDARY"
   ],
   "Nightsisters": [
-    "ASAJVENTRESS",
+    {
+      "defId": "ASAJVENTRESS",
+      "threshold": { "zetas": ["leaderskill_ASAJVENTRESS"] }
+    },
     "MOTHERTALZIN",
     "DAKA",
     { "defId": "NIGHTSISTERZOMBIE", "threshold": { "gearLevel": "10" } },
     ["NIGHTSISTERSPIRIT", "ENFYSNEST", "NIGHTSISTERACOLYTE"]
   ],
   "Bounty Hunters": [
-    "JANGOFETT",
+    {
+      "defId": "JANGOFETT",
+      "threshold": { "zetas": ["leaderskill_JANGOFETT"] }
+    },
     "BOSSK",
     "BOBAFETT",
     "DENGAR",
     ["CADBANE", "GREEDO", "AURRA_SING", "EMBO"]
   ],
   "First Order": [
-    "KYLORENUNMASKED",
+    {
+      "defId": "KYLORENUNMASKED",
+      "threshold": { "zetas": ["leaderskill_KYLORENUNMASKED"] }
+    },
     "KYLOREN",
     "FIRSTORDERTROOPER",
     "FIRSTORDEREXECUTIONER",
@@ -99,7 +124,10 @@
   ],
   "Ewoks": ["CHIEFCHIRPA", "EWOKELDER", "LOGRAY", "PAPLOO", "WICKET"],
   "Old Republic": [
-    "CARTHONASI",
+    {
+      "defId": "CARTHONASI",
+      "threshold": { "zetas": ["leaderskill_CARTHONASI"] }
+    },
     "ZAALBAR",
     "MISSIONVAO",
     "CANDEROUSORDO",

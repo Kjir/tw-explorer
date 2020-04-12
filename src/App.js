@@ -20,7 +20,7 @@ async function fetchGuildInfo(allyCode, setRoster, setFetching) {
     0,
     { method: "GET" }
   );
-  const guild = (await response.json())[0];
+  const guild = (await response.json())[0] || {};
   setFetching(`players`);
   setRoster([]);
 
@@ -88,6 +88,7 @@ function App() {
   const [roster, setRoster] = useState([]);
   const [guild, setGuild] = useState({ allyCode: getLastAllyCode() });
   const [fetching, setFetching] = useState(null);
+  const [requiredGP, setRequiredGP] = useState(80000);
 
   useEffect(() => {
     if (!guild || !guild.members) {
@@ -108,13 +109,23 @@ function App() {
     if (!event.target) {
       return;
     }
-    setGuild(g => ({ ...g, allyCode: event.target.value }));
+    var allyCode = event.target.value;
+    setGuild(g => ({ ...g, allyCode: allyCode }));
   }
 
   function clearCache() {
     if (window.confirm("Are you sure you want to clear the cache?")) {
       fetch("/cache/clear");
     }
+  }
+
+  function updateRequiredGP(event) {
+    if (!event.target) {
+      return;
+    }
+    var gp = +event.target.value;
+    setRequiredGP(gp);
+    
   }
 
   var num_format = new Intl.NumberFormat("en-CA");
@@ -149,7 +160,12 @@ function App() {
         <h3>Select team</h3>
         <ul className="teamSelector">{teamSelector}</ul>
       </section>
-      <Teams players={roster} team={teams[currentTeam]}></Teams>
+      <section>
+        <h3>Minimum GP</h3>
+        <h4>{requiredGP}</h4>
+        <input type="range" min="50000" max="150000" value={requiredGP} step="1000" className="gp-range" onChange={updateRequiredGP}/>
+      </section>
+      <Teams players={roster} team={teams[currentTeam]} requiredGP={requiredGP}></Teams>
     </div>
   );
 }

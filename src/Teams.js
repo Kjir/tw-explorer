@@ -7,10 +7,10 @@ import statsTranslations from "./eng_us.json";
 statsCalculator.setGameData(gameData);
 
 async function getTeamStats(playerTeams) {
-  let heroes = playerTeams.flatMap(player => player.roster);
+  let heroes = playerTeams.flatMap((player) => player.roster);
   statsCalculator.calcRosterStats(heroes, {
     gameStyle: true,
-    language: statsTranslations
+    language: statsTranslations,
   });
   return heroes.reduce((heroesMap, currentHero) => {
     return { ...heroesMap, [currentHero.id]: currentHero };
@@ -26,7 +26,7 @@ function adjustGP(currentGP, relics) {
 }
 
 function getBestHero(heroes, playerRoster) {
-  const availableHeroes = playerRoster.filter(playerHero =>
+  const availableHeroes = playerRoster.filter((playerHero) =>
     heroes.includes(playerHero.defId)
   );
   return availableHeroes.sort(
@@ -48,6 +48,12 @@ function matchesThreshold(threshold, playerHero) {
   if (threshold.gearLevel && playerHero.gear < threshold.gearLevel) {
     return false;
   }
+
+  if (threshold.zetas) {
+    return playerHero.skills
+      .filter((skill) => threshold.zetas.includes(skill.id))
+      .every((skill) => skill.tiers === skill.tier);
+  }
   return true;
 }
 
@@ -64,40 +70,41 @@ function isUsableHero(hero, playerHero) {
 function getPlayersWithTeam(players, team) {
   return players
     .filter(
-      player =>
+      (player) =>
         player &&
-        team.every(hero => player.roster.some(isUsableHero.bind(null, hero)))
+        team.every((hero) => player.roster.some(isUsableHero.bind(null, hero)))
     )
-    .map(player => {
+    .map((player) => {
       return {
         ...player,
-        roster: team.map(hero => {
+        roster: team.map((hero) => {
           if (Array.isArray(hero)) {
             return getBestHero(hero, player.roster);
           } else {
             return player.roster.find(isUsableHero.bind(null, hero));
           }
-        })
+        }),
       };
     });
 }
 
 function getSortedPlayers(players, team, heroStats = {}) {
   return players
-    .map(player => {
-      const heroes = team.map(hero => {
+    .map((player) => {
+      const heroes = team.map((hero) => {
         const playerHero = player.roster.find(isUsableHero.bind(null, hero));
         return {
           ...(heroStats[playerHero.id] || playerHero),
           name: playerHero.defId,
           gp: adjustGP(playerHero.gp, playerHero.relic.currentTier),
-          matchesThreshold: matchesThreshold(hero.threshold, playerHero)
+          matchesThreshold: matchesThreshold(hero.threshold, playerHero),
         };
       });
       return {
         ...player,
         roster: heroes,
-        team_gp: heroes.reduce((total, hero) => total + hero.gp, 0)
+        team_gp: heroes.reduce((total, hero) => total + hero.gp, 0),
+        isReady: heroes.every((hero) => hero.matchesThreshold),
       };
     })
     .sort((player1, player2) => player2.team_gp - player1.team_gp);
@@ -110,9 +117,9 @@ async function enrichPlayerTeams(players, team, setPlayerTeams) {
   setPlayerTeams(getSortedPlayers(playersWithTeam, team, heroStats));
 }
 
-export function Teams({ players, team }) {
+export function Teams({ players, team, requiredGP }) {
   var num_format = new Intl.NumberFormat("en-CA");
-  const heading = team.map(hero =>
+  const heading = team.map((hero) =>
     Array.isArray(hero) ? (
       <th key={hero.join("-")}>{hero.join("/")}</th>
     ) : (
@@ -127,14 +134,14 @@ export function Teams({ players, team }) {
 
   function getPlayerRow(player, index) {
     const heroCells = [
-      ...player.roster.map(hero => (
+      ...player.roster.map((hero) => (
         <td
           key={hero.name + "-details"}
           className={hero.matchesThreshold ? null : "incomplete"}
         >
           <Hero data={hero} />
         </td>
-      ))
+      )),
     ];
     return (
       <tr key={player.name}>
@@ -154,17 +161,50 @@ export function Teams({ players, team }) {
     );
   }
 
+  function isTeamReady(team) {
+    return team.isReady && team.team_gp >= requiredGP;
+  }
+
+  function getMatchingTeams() {
+    return playerTeams.filter(isTeamReady);
+  }
+
+  function getOtherTeams() {
+    return playerTeams.filter((team) => !isTeamReady(team));
+  }
+
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Player</th>
-          {heading}
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>{playerTeams.map(getPlayerRow)}</tbody>
-    </table>
+    <section>
+      <h4>Matching teams</h4>
+      <h5>
+        {getMatchingTeams().length}/{playerTeams.length}
+      </h5>
+      <table>
+        <thead>
+          <tr key={"matching"}>
+            <th>#</th>
+            <th>Player</th>
+            {heading}
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>{getMatchingTeams().map(getPlayerRow)}</tbody>
+      </table>
+      <h4>Other teams</h4>
+      <h5>
+        {getOtherTeams().length}/{playerTeams.length}
+      </h5>
+      <table>
+        <thead>
+          <tr key={"unmatching"}>
+            <th>#</th>
+            <th>Player</th>
+            {heading}
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>{getOtherTeams().map(getPlayerRow)}</tbody>
+      </table>
+    </section>
   );
 }

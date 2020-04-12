@@ -43,3 +43,7 @@
 .teamSelector button.active {
   background-color: cornflowerblue;
 }
+
+.gp-range {
+  width: 80%;
+}
