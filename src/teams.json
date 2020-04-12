@@ -3,7 +3,12 @@
     "DARTHREVAN",
     "BASTILASHANDARK",
     ["SITHTROOPER", "SITHMARAUDER"],
-    "DARTHMALAK",
+    {
+      "defId": "DARTHMALAK",
+      "threshold": {
+        "zetas": ["uniqueskill_DARTHMALAK01", "uniqueskill_DARTHMALAK02"]
+      }
+    },
     "HK47"
   ],
   "Jedi Knight Revan": [
