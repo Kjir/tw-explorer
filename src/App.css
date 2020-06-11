@@ -28,7 +28,8 @@
 }
 
 .App input,
-.App button {
+.App button,
+.App .team-link {
   background-color: #2673ad;
   color: #f3f3f3;
   font-size: 16px;
@@ -59,14 +60,14 @@
   flex: 0 0 auto;
   margin: 5px;
 }
-.teamSelector button {
-  width: 100%;
+.teamSelector .team-link {
+  display: inline-block;
   border: 2px solid #a7e2e3;
   background-color: #2673ad;
-  border-radius: 4px;
+  border-radius: 15px;
   padding: 10px;
 }
-.teamSelector button.active {
+.teamSelector .team-link.active {
   background-color: #74a5ca;
   border-color: #80cfa9;
 }

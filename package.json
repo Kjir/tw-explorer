@@ -5,7 +5,9 @@
   "dependencies": {
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.1",
+    "slugg": "^1.2.1",
     "source-map-explorer": "^2.1.2",
     "swgoh-stat-calc": "^1.1.0"
   },

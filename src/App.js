@@ -2,6 +2,17 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { Teams } from "./Teams.js";
 import teams from "./teams.json";
+import {
+  BrowserRouter as Router,
+  Route,
+  NavLink,
+  useParams,
+} from "react-router-dom";
+import slugify from "slugg";
+
+function unslugify(slug) {
+  return slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
 
 function throttledFetch(url, index, options = {}) {
   if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
@@ -87,8 +98,15 @@ function saveLastAllyCode(allyCode) {
   window.localStorage.setItem("lastAllyCode", allyCode);
 }
 
+function SelectedTeams({ ...attrs }) {
+  var { team: teamName } = useParams();
+  if (!teamName) {
+    teamName = slugify(Object.keys(teams)[0]);
+  }
+  return <Teams team={teams[unslugify(teamName)]} {...attrs}></Teams>;
+}
+
 function App() {
-  const [currentTeam, setTeam] = useState(Object.keys(teams)[0]);
   const [roster, setRoster] = useState([]);
   const [guild, setGuild] = useState({ allyCode: getLastAllyCode() });
   const [fetching, setFetching] = useState(null);
@@ -142,12 +160,9 @@ function App() {
 
   const teamSelector = Object.keys(teams).map((team) => (
     <li key={team}>
-      <button
-        className={currentTeam === team ? "active" : ""}
-        onClick={() => setTeam(team)}
-      >
+      <NavLink to={"/team/" + slugify(team)} className="team-link">
         {team}
-      </button>
+      </NavLink>
     </li>
   ));
 
@@ -157,45 +172,48 @@ function App() {
     </progress>
   ) : null;
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Territory Wars: Team Explorer</h1>
-      </header>
-      <section>
-        <h3>Ally code</h3>
-        <input
-          type="text"
-          name="allyCode"
-          value={guild.allyCode}
-          onChange={updateGuild}
-        />
-        <button onClick={fetchRoster}>Fetch</button>
-        <button onClick={clearCache}>Clear cache</button>
-        {fetchingMessage}
-      </section>
-      <section>
-        <h1>{guildName}</h1>
-        <h3>Select team</h3>
-        <ul className="teamSelector">{teamSelector}</ul>
-      </section>
-      <section>
-        <h3>Minimum GP: {num_format.format(requiredGP)}</h3>
-        <input
-          type="range"
-          min="50000"
-          max="150000"
-          value={requiredGP}
-          step="1000"
-          className="gp-range"
-          onChange={updateRequiredGP}
-        />
-      </section>
-      <Teams
-        players={roster}
-        team={teams[currentTeam]}
-        requiredGP={requiredGP}
-      ></Teams>
-    </div>
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          <h1>Territory Wars: Team Explorer</h1>
+        </header>
+        <section>
+          <h3>Ally code</h3>
+          <input
+            type="text"
+            name="allyCode"
+            value={guild.allyCode}
+            onChange={updateGuild}
+          />
+          <button onClick={fetchRoster}>Fetch</button>
+          <button onClick={clearCache}>Clear cache</button>
+          {fetchingMessage}
+        </section>
+        <section>
+          <h1>{guildName}</h1>
+          <h3>Select team</h3>
+          <ul className="teamSelector">{teamSelector}</ul>
+        </section>
+        <section>
+          <h3>Minimum GP: {num_format.format(requiredGP)}</h3>
+          <input
+            type="range"
+            min="50000"
+            max="150000"
+            value={requiredGP}
+            step="1000"
+            className="gp-range"
+            onChange={updateRequiredGP}
+          />
+        </section>
+        <Route>
+          <SelectedTeams players={roster} requiredGP={requiredGP} />
+        </Route>
+        <Route path="/team/:team">
+          <SelectedTeams players={roster} requiredGP={requiredGP} />
+        </Route>
+      </div>
+    </Router>
   );
 }
 
