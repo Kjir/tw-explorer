@@ -7,6 +7,7 @@ import {
   Route,
   NavLink,
   useParams,
+  Switch,
 } from "react-router-dom";
 import slugify from "slugg";
 
@@ -206,12 +207,14 @@ function App() {
             onChange={updateRequiredGP}
           />
         </section>
-        <Route>
-          <SelectedTeams players={roster} requiredGP={requiredGP} />
-        </Route>
-        <Route path="/team/:team">
-          <SelectedTeams players={roster} requiredGP={requiredGP} />
-        </Route>
+        <Switch>
+          <Route path="/team/:team">
+            <SelectedTeams players={roster} requiredGP={requiredGP} />
+          </Route>
+          <Route>
+            <SelectedTeams players={roster} requiredGP={requiredGP} />
+          </Route>
+        </Switch>
       </div>
     </Router>
   );
