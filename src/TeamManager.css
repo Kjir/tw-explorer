@@ -1,0 +1,20 @@
+.TeamManager ul {
+    list-style: none;
+}
+
+.character-list {
+    display: flex;
+}
+
+.multiple-choice {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 128px;
+    width: 128px;
+}
+
+.multiple-choice img {
+    flex: 0 0 64px;
+}

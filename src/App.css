@@ -1,6 +1,6 @@
 .App {
   background-color: #282c34;
-  color:#f3f3f3;
+  color: #f3f3f3;
   padding: 50px;
 }
 
@@ -15,6 +15,22 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
+}
+
+nav {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center; 
+  margin: 0;
+}
+
+nav li {
+  padding: 0 1rem;
 }
 
 .App h2,
