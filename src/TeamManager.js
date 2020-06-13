@@ -1,38 +1,102 @@
 import React, { useState } from "react";
 import "./TeamManager.css";
 
-function characterImage(teamName, character, size = "128") {
+function CharacterImage({ teamName, character, deleteChar, size = "128" }) {
   if (Array.isArray(character)) {
     return (
       <div
         className="multiple-choice"
         key={`${teamName}-multiple-${character.join(",")}`}
       >
-        {character.map((c) => characterImage(teamName, c, "64"))}
+        {character.map((c) => (
+          <CharacterImage
+            key={`${teamName}-${c}`}
+            teamName={teamName}
+            character={c}
+            deleteChar={deleteChar}
+            size="64"
+          />
+        ))}
       </div>
     );
   }
   const charName = character.defId || character;
   return (
-    <img
-      src={`https://swgoh.gg/game-asset/u/${charName}/`}
-      alt={charName}
-      width={size}
-      height={size}
-      key={`${teamName}-${charName}`}
-    />
+    <span className="character-image">
+      <img
+        src={`https://swgoh.gg/game-asset/u/${charName}/`}
+        alt={charName}
+        width={size}
+        height={size}
+        key={`${teamName}-${charName}`}
+      />
+      <button onClick={() => deleteChar(charName)} className="delete">
+        X
+      </button>
+    </span>
   );
 }
 
-function formatTeamRow(teamName, teams) {
-  const team = teams[teamName];
-  const teamPictures = team.map((c) => characterImage(teamName, c));
+function AddCharacterButton({ onClick }) {
+  return (
+    <span className="add-character">
+      <button onClick={onClick}>&#43;</button>
+    </span>
+  );
+}
+
+function AddCharacter({ addChar, cancel }) {
+  const [charName, setCharName] = useState();
+  return (
+    <div>
+      <h3>Add character</h3>
+      <label htmlFor="char-name">Character defId:</label>
+      <input
+        name="char-name"
+        type="text"
+        onChange={({ target }) => setCharName(target.value)}
+      />
+      <button onClick={() => addChar(charName)} className="primary">
+        Save
+      </button>
+      <button onClick={cancel} className="secondary">
+        Cancel
+      </button>
+    </div>
+  );
+}
+
+function TeamRow({ teamName, team, addCharacter, deleteCharacter }) {
+  const teamPictures = team.map((c) => (
+    <CharacterImage
+      key={`${teamName}-${JSON.stringify(c)}`}
+      teamName={teamName}
+      character={c}
+      deleteChar={deleteCharacter}
+    />
+  ));
+  const [showAddChar, setShowAddChar] = useState(false);
+
+  function cancel() {
+    setShowAddChar(false);
+  }
+
+  function addChar(charName) {
+    addCharacter(charName);
+    setShowAddChar(false);
+  }
 
   return (
     <li key={teamName}>
       <h2>{teamName}</h2>
 
-      <div className="character-list">{teamPictures}</div>
+      <div className="character-list">
+        {teamPictures}
+        {team.length < 5 ? (
+          <AddCharacterButton onClick={() => setShowAddChar(true)} />
+        ) : null}
+      </div>
+      {showAddChar ? <AddCharacter cancel={cancel} addChar={addChar} /> : null}
     </li>
   );
 }
@@ -61,10 +125,41 @@ function NewTeam({ addTeam }) {
 }
 
 export function TeamManager({ teams, setTeams }) {
-  const teamsList = teams
-    ? Object.keys(teams).map((t) => formatTeamRow(t, teams))
-    : null;
+  function addCharacter(teamName, charName) {
+    setTeams((oldTeams) => ({
+      ...oldTeams,
+      [teamName]: [...oldTeams[teamName], charName],
+    }));
+  }
 
+  function deleteCharacter(teamName, charName) {
+    setTeams((oldTeams) => {
+      const updatedTeam = oldTeams[teamName]
+        .filter((char) => char !== charName)
+        .map((char) =>
+          Array.isArray(char) ? char.filter((c) => c !== charName) : char
+        );
+
+      return {
+        ...oldTeams,
+        [teamName]: updatedTeam,
+      };
+    });
+  }
+
+  const teamsList = !teams
+    ? null
+    : Object.keys(teams).map((t) => {
+        return (
+          <TeamRow
+            key={`teamrow-${t}`}
+            teamName={t}
+            team={teams[t]}
+            addCharacter={addCharacter.bind(undefined, t)}
+            deleteCharacter={deleteCharacter.bind(undefined, t)}
+          />
+        );
+      });
   function addTeam(teamName) {
     setTeams((t) => ({ ...t, [teamName]: [] }));
   }

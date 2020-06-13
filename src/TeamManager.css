@@ -1,20 +1,69 @@
 .TeamManager ul {
-    list-style: none;
+  list-style: none;
 }
 
 .character-list {
-    display: flex;
+  display: flex;
 }
 
 .multiple-choice {
-    display: inline-flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    height: 128px;
-    width: 128px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 128px;
+  width: 128px;
 }
 
-.multiple-choice img {
-    flex: 0 0 64px;
+.multiple-choice .character-image {
+  flex: 0 0 64px;
+}
+
+.character-image {
+    position: relative;
+}
+
+.character-image .delete {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: tomato;
+    margin: 0;
+    font-size: 1rem;
+    border-radius: 10%;
+    width:44px;
+    height: 44px;
+}
+
+.character-image .delete:active {
+    background-color: burlywood;
+}
+
+.multiple-choice .character-image .delete {
+    width: 22px;
+    height: 22px;
+    font-size: 0.5rem;
+    line-height: 0.5rem;
+}
+
+.add-character {
+  display: inline-block;
+  width: 118px;
+  height: 118px;
+  border: 5px dashed white;
+  text-align: center;
+}
+
+.add-character button {
+  border: none;
+  background-color: transparent;
+  font-size: 60px;
+  font-weight: bold;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.add-character button:active {
+  background-color: cornflowerblue;
 }
