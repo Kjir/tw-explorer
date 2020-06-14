@@ -5,6 +5,7 @@ import {
   useRouteMatch,
   useParams,
 } from "react-router-dom/cjs/react-router-dom.min";
+import "./Guilds.css";
 import { GuildSelector } from "./GuildSelector";
 import { getLastAllyCode } from "./localStorage";
 import { Teams } from "./Teams";
@@ -38,6 +39,35 @@ function TeamSelector({ teams }) {
   );
 }
 
+function GuildName({ guild, num_format }) {
+  function getDate(milliseconds) {
+    const d = new Date(milliseconds);
+    if (isNaN(d.getTime())) return null;
+
+    return new Date(milliseconds).toLocaleString();
+  }
+
+  return guild.name ? (
+    <section className="guild-name">
+      <img
+        src={`https://swgoh.gg/static/img/assets/tex.${guild.bannerLogo}.png`}
+        width="128"
+        height="128"
+        alt={guild.name}
+        title={guild.name}
+      />
+      <div className="guild-title">
+        <h1>
+          {guild.name} ({num_format.format(guild.gp)})
+        </h1>
+        {getDate(guild.updated) ? (
+          <p>Last updated: {getDate(guild.updated)}</p>
+        ) : null}
+      </div>
+    </section>
+  ) : null;
+}
+
 export function Guilds({ teams }) {
   const [guild, setGuild] = useState({ allyCode: getLastAllyCode() });
   const [roster, setRoster] = useState([]);
@@ -54,17 +84,6 @@ export function Guilds({ teams }) {
 
   var num_format = new Intl.NumberFormat("en-CA");
 
-  const guildName = guild.name
-    ? `${guild.name} (${num_format.format(guild.gp)})`
-    : "";
-
-  function getDate(milliseconds) {
-    const d = new Date(milliseconds);
-    if (isNaN(d.getTime())) return null;
-
-    return new Date(milliseconds).toLocaleString();
-  }
-
   return (
     <section>
       <GuildSelector
@@ -73,11 +92,8 @@ export function Guilds({ teams }) {
         roster={roster}
         setRoster={setRoster}
       />
+      <GuildName guild={guild} num_format={num_format} />
       <section>
-        <h1>{guildName}</h1>
-        {getDate(guild.updated) ? (
-          <p>Last updated: {getDate(guild.updated)}</p>
-        ) : null}
         <h3>Select team</h3>
         <TeamSelector teams={teams} />
       </section>

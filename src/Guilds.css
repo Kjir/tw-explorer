@@ -1,0 +1,15 @@
+.guild-name {
+  background-color: gainsboro;
+  padding: 1rem;
+  color: black;
+  display: flex;
+  justify-content: center;
+}
+
+.guild-name h1 {
+  font-size: 35px;
+}
+
+.guild-name img {
+    flex: 0 0 128px;
+}
