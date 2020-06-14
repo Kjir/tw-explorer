@@ -52,7 +52,7 @@ function AddCharacterButton({ onClick }) {
 }
 
 function AddCharacter({ addChar, cancel }) {
-  const units = Object.keys(unitData);
+  const [units] = useState(Object.keys(unitData));
   const [charName, setCharName] = useState();
   const [matchingChars, setMatchingChars] = useState(units);
   const [selectedChars, setSelectedChars] = useState([]);

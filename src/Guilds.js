@@ -18,14 +18,31 @@ function SelectedTeams({ teams, ...attrs }) {
   if (!teamName) {
     teamName = slugify(Object.keys(teams)[0]);
   }
-  return <Teams team={teams[unslugify(teamName)]} {...attrs}></Teams>;
+  const selectedTeam = teams[unslugify(teamName)];
+  return <Teams team={selectedTeam} {...attrs}></Teams>;
+}
+
+function TeamSelector({ teams }) {
+  const { url } = useRouteMatch();
+
+  return (
+    <ul className="teamSelector">
+      {Object.keys(teams).map((team) => (
+        <li key={team}>
+          <NavLink to={`${url}/team/${slugify(team)}`} className="team-link">
+            {team}
+          </NavLink>
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 export function Guilds({ teams }) {
   const [guild, setGuild] = useState({ allyCode: getLastAllyCode() });
   const [roster, setRoster] = useState([]);
   const [requiredGP, setRequiredGP] = useState(80000);
-  const { path, url } = useRouteMatch();
+  const { path } = useRouteMatch();
 
   function updateRequiredGP(event) {
     if (!event.target) {
@@ -41,14 +58,6 @@ export function Guilds({ teams }) {
     ? `${guild.name} (${num_format.format(guild.gp)})`
     : "";
 
-  const teamSelector = Object.keys(teams).map((team) => (
-    <li key={team}>
-      <NavLink to={`${url}/team/${slugify(team)}`} className="team-link">
-        {team}
-      </NavLink>
-    </li>
-  ));
-
   return (
     <section>
       <GuildSelector
@@ -60,7 +69,7 @@ export function Guilds({ teams }) {
       <section>
         <h1>{guildName}</h1>
         <h3>Select team</h3>
-        <ul className="teamSelector">{teamSelector}</ul>
+        <TeamSelector teams={teams} />
       </section>
       <section>
         <h3>Minimum GP: {num_format.format(requiredGP)}</h3>
@@ -76,10 +85,18 @@ export function Guilds({ teams }) {
       </section>
       <Switch>
         <Route path={`${path}/team/:team`}>
-          <SelectedTeams teams={teams} players={roster} requiredGP={requiredGP} />
+          <SelectedTeams
+            teams={teams}
+            players={roster}
+            requiredGP={requiredGP}
+          />
         </Route>
         <Route path={path}>
-          <SelectedTeams teams={teams} players={roster} requiredGP={requiredGP} />
+          <SelectedTeams
+            teams={teams}
+            players={roster}
+            requiredGP={requiredGP}
+          />
         </Route>
       </Switch>
     </section>
