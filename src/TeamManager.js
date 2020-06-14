@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { unitData } from "./gameData.json";
 import "./TeamManager.css";
+import { saveFile } from "./utils";
 
 function CharacterImage({ teamName, character, deleteChar, size = "128" }) {
   if (Array.isArray(character) && character.length > 1) {
@@ -195,15 +196,9 @@ function SaveAndRestore({ teams, setTeams }) {
   return (
     <div>
       <h2>Save &amp; Restore</h2>
-      <a
-        className="button-link"
-        download="teams.json"
-        href={`data:text/json;charset=utf-8,${encodeURIComponent(
-          JSON.stringify(teams, undefined, 2)
-        )}`}
-      >
+      <button onClick={() => saveFile("teams.json", teams)}>
         Export teams
-      </a>
+      </button>
       <br />
       <input
         type="file"

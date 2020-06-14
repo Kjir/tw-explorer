@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { saveLastAllyCode } from "./localStorage";
+import { saveFile } from "./utils";
 
 function throttledFetch(url, index, options = {}) {
   if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
@@ -43,9 +44,46 @@ async function fetchGuildInfo(allyCode, setRoster, setFetching, setFetched) {
   return guild;
 }
 
+function SaveAndImport({ guild, setGuild, roster, setRoster }) {
+  const [guildInfo, setGuildInfo] = useState();
+  const [uploadedFile, setUploadedFile] = useState();
+
+  useEffect(() => {
+    setGuildInfo({ guild, roster });
+  }, [guild, roster]);
+
+  async function restoreGuildInfo() {
+    const uploadedGuildInfo = JSON.parse(await uploadedFile.text());
+    setGuild(uploadedGuildInfo.guild);
+    setRoster(uploadedGuildInfo.roster);
+  }
+
+  return (
+    <div>
+      <h4>Save &amp; Import</h4>
+      <button
+        onClick={() =>
+          saveFile(`${guild.allyCode}-guild-info.json`, { guild, roster })
+        }
+      >
+        Export guild info
+      </button>
+      <br />
+      <input
+        type="file"
+        name="guild-info"
+        onChange={({ target }) => setUploadedFile(target.files[0])}
+      />
+      <button onClick={restoreGuildInfo}>Restore guild info</button>
+      <br />
+    </div>
+  );
+}
+
 export function GuildSelector({ guild, setGuild, roster, setRoster }) {
   const [fetching, setFetching] = useState(null);
   const [fetched, setFetched] = useState(1);
+
   useEffect(() => {
     if (!guild || !guild.members) {
       return;
@@ -54,6 +92,7 @@ export function GuildSelector({ guild, setGuild, roster, setRoster }) {
       setFetching(null);
     }
   }, [guild, roster]);
+
   function fetchRoster() {
     fetchGuildInfo(
       guild.allyCode,
@@ -62,11 +101,13 @@ export function GuildSelector({ guild, setGuild, roster, setRoster }) {
       setFetched
     ).then((newGuild) => setGuild((g) => ({ ...g, ...newGuild })));
   }
+
   function clearCache() {
     if (window.confirm("Are you sure you want to clear the cache?")) {
       fetch("/cache/clear");
     }
   }
+
   function updateGuild(event) {
     if (!event.target) {
       return;
@@ -74,6 +115,7 @@ export function GuildSelector({ guild, setGuild, roster, setRoster }) {
     var allyCode = event.target.value;
     setGuild((g) => ({ ...g, allyCode: allyCode }));
   }
+
   const fetchingMessage = fetching ? (
     <div>
       <progress
@@ -83,18 +125,27 @@ export function GuildSelector({ guild, setGuild, roster, setRoster }) {
       <span>Fetching {fetching}</span>
     </div>
   ) : null;
+
   return (
     <section>
       <h3>Ally code</h3>
-      <input
-        type="text"
-        name="allyCode"
-        value={guild.allyCode}
-        onChange={updateGuild}
+      <div>
+        <input
+          type="text"
+          name="allyCode"
+          value={guild.allyCode}
+          onChange={updateGuild}
+        />
+        <button onClick={fetchRoster}>Fetch</button>
+        <button onClick={clearCache}>Clear cache</button>
+        {fetchingMessage}
+      </div>
+      <SaveAndImport
+        guild={guild}
+        roster={roster}
+        setGuild={setGuild}
+        setRoster={setRoster}
       />
-      <button onClick={fetchRoster}>Fetch</button>
-      <button onClick={clearCache}>Clear cache</button>
-      {fetchingMessage}
     </section>
   );
 }
