@@ -30,7 +30,7 @@ function TeamSelector({ teams }) {
     <ul className="teamSelector">
       {Object.keys(teams).map((team) => (
         <li key={team}>
-          <NavLink to={`${url}/team/${slugify(team)}`} className="team-link">
+          <NavLink to={`${url}team/${slugify(team)}`} className="team-link">
             {team}
           </NavLink>
         </li>
