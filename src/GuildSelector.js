@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./GuildSelector.css";
 import { saveLastAllyCode } from "./localStorage";
 import { saveFile } from "./utils";
 
@@ -44,18 +45,71 @@ async function fetchGuildInfo(allyCode, setRoster, setFetching, setFetched) {
   return guild;
 }
 
-function SaveAndImport({ guild, setGuild, roster, setRoster }) {
-  const [guildInfo, setGuildInfo] = useState();
-  const [uploadedFile, setUploadedFile] = useState();
+function FetchingMessage({ guild, fetched, fetching }) {
+  return fetching ? (
+    <div>
+      <progress
+        max={guild && guild.members ? guild.members : 50}
+        value={fetched}
+      ></progress>
+      <span>Fetching {fetching}</span>
+    </div>
+  ) : null;
+}
 
-  useEffect(() => {
-    setGuildInfo({ guild, roster });
-  }, [guild, roster]);
+function FetchGuild({ guild, setGuild, setRoster, fetching, setFetching }) {
+  const [fetched, setFetched] = useState(1);
+
+  function fetchRoster() {
+    fetchGuildInfo(
+      guild.allyCode,
+      setRoster,
+      setFetching,
+      setFetched
+    ).then((newGuild) => setGuild((g) => ({ ...g, ...newGuild })));
+  }
+
+  function clearCache() {
+    if (window.confirm("Are you sure you want to clear the cache?")) {
+      fetch("/cache/clear");
+    }
+  }
+
+  function updateGuild(event) {
+    if (!event.target) {
+      return;
+    }
+    var allyCode = event.target.value;
+    setGuild((g) => ({ ...g, allyCode: allyCode }));
+  }
+
+  return (
+    <div>
+      <h3>Ally code</h3>
+      <input
+        type="text"
+        name="allyCode"
+        value={guild.allyCode}
+        onChange={updateGuild}
+      />
+      <button onClick={fetchRoster}>Fetch</button>
+      <button onClick={clearCache}>Clear cache</button>
+      <FetchingMessage guild={guild} fetched={fetched} fetching={fetching} />
+    </div>
+  );
+}
+
+function SaveAndImport({ guild, setGuild, roster, setRoster }) {
+  const [uploadedFile, setUploadedFile] = useState();
 
   async function restoreGuildInfo() {
     const uploadedGuildInfo = JSON.parse(await uploadedFile.text());
-    setGuild(uploadedGuildInfo.guild);
-    setRoster(uploadedGuildInfo.roster);
+    if (uploadedGuildInfo.guild) {
+      setGuild(uploadedGuildInfo.guild);
+    }
+    if (uploadedGuildInfo.roster) {
+      setRoster(uploadedGuildInfo.roster);
+    }
   }
 
   return (
@@ -82,7 +136,6 @@ function SaveAndImport({ guild, setGuild, roster, setRoster }) {
 
 export function GuildSelector({ guild, setGuild, roster, setRoster }) {
   const [fetching, setFetching] = useState(null);
-  const [fetched, setFetched] = useState(1);
 
   useEffect(() => {
     if (!guild || !guild.members) {
@@ -93,59 +146,25 @@ export function GuildSelector({ guild, setGuild, roster, setRoster }) {
     }
   }, [guild, roster]);
 
-  function fetchRoster() {
-    fetchGuildInfo(
-      guild.allyCode,
-      setRoster,
-      setFetching,
-      setFetched
-    ).then((newGuild) => setGuild((g) => ({ ...g, ...newGuild })));
-  }
-
-  function clearCache() {
-    if (window.confirm("Are you sure you want to clear the cache?")) {
-      fetch("/cache/clear");
-    }
-  }
-
-  function updateGuild(event) {
-    if (!event.target) {
-      return;
-    }
-    var allyCode = event.target.value;
-    setGuild((g) => ({ ...g, allyCode: allyCode }));
-  }
-
-  const fetchingMessage = fetching ? (
-    <div>
-      <progress
-        max={guild && guild.members ? guild.members : 50}
-        value={fetched}
-      ></progress>
-      <span>Fetching {fetching}</span>
-    </div>
-  ) : null;
-
   return (
-    <section>
-      <h3>Ally code</h3>
-      <div>
-        <input
-          type="text"
-          name="allyCode"
-          value={guild.allyCode}
-          onChange={updateGuild}
+    <section className="GuildSelector">
+      <section>
+        <FetchGuild
+          guild={guild}
+          setGuild={setGuild}
+          setRoster={setRoster}
+          fetching={fetching}
+          setFetching={setFetching}
         />
-        <button onClick={fetchRoster}>Fetch</button>
-        <button onClick={clearCache}>Clear cache</button>
-        {fetchingMessage}
-      </div>
-      <SaveAndImport
-        guild={guild}
-        roster={roster}
-        setGuild={setGuild}
-        setRoster={setRoster}
-      />
+      </section>
+      <section>
+        <SaveAndImport
+          guild={guild}
+          roster={roster}
+          setGuild={setGuild}
+          setRoster={setRoster}
+        />
+      </section>
     </section>
   );
 }

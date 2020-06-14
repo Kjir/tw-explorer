@@ -1,0 +1,6 @@
+.GuildSelector {
+    display: flex;
+}
+.GuildSelector section {
+    flex: 1 1 auto;
+}

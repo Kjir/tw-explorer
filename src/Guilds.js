@@ -58,6 +58,13 @@ export function Guilds({ teams }) {
     ? `${guild.name} (${num_format.format(guild.gp)})`
     : "";
 
+  function getDate(milliseconds) {
+    const d = new Date(milliseconds);
+    if (isNaN(d.getTime())) return null;
+
+    return new Date(milliseconds).toLocaleString();
+  }
+
   return (
     <section>
       <GuildSelector
@@ -68,6 +75,9 @@ export function Guilds({ teams }) {
       />
       <section>
         <h1>{guildName}</h1>
+        {getDate(guild.updated) ? (
+          <p>Last updated: {getDate(guild.updated)}</p>
+        ) : null}
         <h3>Select team</h3>
         <TeamSelector teams={teams} />
       </section>
