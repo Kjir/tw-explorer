@@ -22,9 +22,15 @@
   vertical-align: middle;
 }
 
-.hero-badge dt {
+.hero-badge dl dt,
+.hero-badge dl dd {
   text-transform: uppercase;
-  background-color: #2673ad;
-  border: 2px solid #80cfa9;
   font-weight: bold;
+  background-color: hsla(206, 64%, 41%, 0.3);
+
+}
+
+.hero-badge dl :nth-child(4n-2),
+.hero-badge dl :nth-child(4n-3) {
+  background-color: hsla(206, 64%, 41%, 0.5);
 }

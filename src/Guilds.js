@@ -110,7 +110,7 @@ export function Guilds({ teams }) {
         />
       </section>
       <Switch>
-        <Route path={`${path}/team/:team`}>
+        <Route path={`${path}team/:team`}>
           <SelectedTeams
             teams={teams}
             players={roster}
