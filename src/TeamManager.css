@@ -67,3 +67,19 @@
 .add-character button:active {
   background-color: cornflowerblue;
 }
+
+.add-character-list .image-button {
+    margin: 0;
+    padding: 0;
+    width: 64px;
+    height: 64px;
+    box-sizing: content-box;
+}
+
+.add-character-list .image-button {
+    border: 2px solid grey;
+}
+
+.add-character-list .image-button.selected {
+    border: 2px solid coral;
+}

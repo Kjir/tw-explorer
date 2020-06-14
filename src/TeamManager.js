@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { unitData } from "./gameData.json";
 import "./TeamManager.css";
 
 function CharacterImage({ teamName, character, deleteChar, size = "128" }) {
-  if (Array.isArray(character)) {
+  if (Array.isArray(character) && character.length > 1) {
     return (
       <div
         className="multiple-choice"
@@ -20,19 +21,24 @@ function CharacterImage({ teamName, character, deleteChar, size = "128" }) {
       </div>
     );
   }
-  const charName = character.defId || character;
+  const currentCharacter = Array.isArray(character) ? character[0] : character;
+  if (!currentCharacter) return null;
+  const charName = currentCharacter.defId || currentCharacter;
   return (
     <span className="character-image">
       <img
         src={`https://swgoh.gg/game-asset/u/${charName}/`}
         alt={charName}
+        title={charName}
         width={size}
         height={size}
         key={`${teamName}-${charName}`}
       />
-      <button onClick={() => deleteChar(charName)} className="delete">
-        X
-      </button>
+      {deleteChar ? (
+        <button onClick={() => deleteChar(charName)} className="delete">
+          X
+        </button>
+      ) : null}
     </span>
   );
 }
@@ -46,22 +52,72 @@ function AddCharacterButton({ onClick }) {
 }
 
 function AddCharacter({ addChar, cancel }) {
+  const units = Object.keys(unitData);
   const [charName, setCharName] = useState();
+  const [matchingChars, setMatchingChars] = useState(units);
+  const [selectedChars, setSelectedChars] = useState([]);
+
+  useEffect(() => {
+    if (!charName) {
+      setMatchingChars(units.slice(0, 48));
+    } else {
+      setMatchingChars(
+        units
+          .filter((char) =>
+            char.toLowerCase().includes(charName.toLowerCase().replace(" ", ""))
+          )
+          .slice(0, 48)
+      );
+    }
+  }, [charName, units]);
+
+  function toggleChar(charName) {
+    if (selectedChars.includes(charName)) {
+      setSelectedChars((sc) => sc.filter((c) => c !== charName));
+    } else {
+      setSelectedChars((sc) => [...sc, charName]);
+    }
+  }
+
   return (
-    <div>
+    <div className="add-character-list">
       <h3>Add character</h3>
-      <label htmlFor="char-name">Character defId:</label>
-      <input
-        name="char-name"
-        type="text"
-        onChange={({ target }) => setCharName(target.value)}
-      />
-      <button onClick={() => addChar(charName)} className="primary">
-        Save
-      </button>
-      <button onClick={cancel} className="secondary">
-        Cancel
-      </button>
+      <div>
+        <label htmlFor="char-name">Character defId:</label>
+        <input
+          name="char-name"
+          type="text"
+          onChange={({ target }) => setCharName(target.value)}
+        />
+      </div>
+      <div>
+        {matchingChars.map((charName) => (
+          <button
+            onClick={() => toggleChar(charName)}
+            className={`image-button${
+              selectedChars.includes(charName) ? " selected" : ""
+            }`}
+          >
+            <CharacterImage
+              key={`charlist-${charName}`}
+              character={charName}
+              size="64"
+            />
+          </button>
+        ))}
+      </div>
+      <h4>Selected</h4>
+      <div>
+        <CharacterImage character={selectedChars} />
+      </div>
+      <div>
+        <button onClick={() => addChar(selectedChars)} className="primary">
+          Save
+        </button>
+        <button onClick={cancel} className="secondary">
+          Cancel
+        </button>
+      </div>
     </div>
   );
 }
@@ -124,6 +180,41 @@ function NewTeam({ addTeam }) {
   );
 }
 
+function SaveAndRestore({ teams, setTeams }) {
+  const [uploadedFile, setUploadedFile] = useState();
+
+  async function importTeams() {
+    try {
+      const importedTeams = JSON.parse(await uploadedFile.text());
+      setTeams(importedTeams);
+    } catch (error) {
+      console.log("Imported file is invalid");
+    }
+  }
+
+  return (
+    <div>
+      <h2>Save &amp; Restore</h2>
+      <a
+        className="button-link"
+        download="teams.json"
+        href={`data:text/json;charset=utf-8,${encodeURIComponent(
+          JSON.stringify(teams, undefined, 2)
+        )}`}
+      >
+        Export teams
+      </a>
+      <br />
+      <input
+        type="file"
+        name="team_json"
+        onChange={({ target }) => setUploadedFile(target.files[0])}
+      />
+      <button onClick={importTeams}>Import</button>
+    </div>
+  );
+}
+
 export function TeamManager({ teams, setTeams }) {
   function addCharacter(teamName, charName) {
     setTeams((oldTeams) => ({
@@ -135,7 +226,9 @@ export function TeamManager({ teams, setTeams }) {
   function deleteCharacter(teamName, charName) {
     setTeams((oldTeams) => {
       const updatedTeam = oldTeams[teamName]
-        .filter((char) => char !== charName)
+        .filter((char) =>
+          char.defId ? char.defId !== charName : char !== charName
+        )
         .map((char) =>
           Array.isArray(char) ? char.filter((c) => c !== charName) : char
         );
@@ -169,6 +262,7 @@ export function TeamManager({ teams, setTeams }) {
       <h1>Team Manager</h1>
       <ul>{teamsList}</ul>
       <NewTeam addTeam={addTeam} />
+      <SaveAndRestore teams={teams} setTeams={setTeams} />
     </section>
   );
 }
