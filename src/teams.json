@@ -114,18 +114,14 @@
     "C3POLEGENDARY"
   ],
   "Clones": [
-    "SHAAKTI",
+    {
+      "defId": "SHAAKTI",
+      "threshold": { "zetas": ["leaderskill_SHAAKTI", "uniqueskill_SHAAKTI01"] }
+    },
     "CT5555",
     "CT7567",
     "CT210408",
-    ["CLONESERGEANTPHASEI", "CC2224", "ARCTROOPER501ST"]
-  ],
-  "Clones Rex Lead": [
-    "CT7567",
-    "CT5555",
-    "CT210408",
-    "CLONESERGEANTPHASEI",
-    ["CC2224", "ARCTROOPER501ST"]
+    "ARCTROOPER501ST"
   ],
   "Ewoks": ["CHIEFCHIRPA", "EWOKELDER", "LOGRAY", "PAPLOO", "WICKET"],
   "Old Republic": [
@@ -144,5 +140,20 @@
     "L3_37",
     "ZAALBAR",
     ["MISSIONVAO", "YOUNGHAN", "ENFYSNEST"]
+  ],
+  "Rey": ["GLREY"],
+  "Supreme Leader": ["SUPREMELEADERKYLOREN"],
+  "Darth Vader": [
+    {
+      "defId": "VADER",
+      "threshold": { "zetas": ["leaderskill_VADER", "specialskill_VADER03"] }
+    },
+    "DARTHTRAYA",
+    "EMPERORPALPATINE",
+    "GRANDADMIRALTHRAWN",
+    {
+      "defId": "WATTAMBOR",
+      "threshold": { "zetas": ["uniqueskill_WATTAMBOR02"] }
+    }
   ]
 }
