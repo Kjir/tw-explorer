@@ -10161,9 +10161,9 @@ svgo@^1.0.0, svgo@^1.2.2:
     util.promisify "~1.0.0"
 
 swgoh-stat-calc@^1.1.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/swgoh-stat-calc/-/swgoh-stat-calc-1.1.1.tgz#3070694b14c6a544d8647ecf5796db30d07500c6"
-  integrity sha512-j/zvwhCa3R/P5uC0gy+84UVz38UHRUufCHGzhgVTfVGIalV3QAJ8PHOa/xm8Cj6/UQatRjeUw+78aptqM4BwFg==
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/swgoh-stat-calc/-/swgoh-stat-calc-1.1.2.tgz#af33b8b994bd3a557ca2b3d979c98bed665d5cfb"
+  integrity sha512-s+tB2C3JDRkDMX1UjzTNn2zBd3/Y7SDvQDkjdDfUzPtBRK2NJrBqOtJQCBfYgXassrZ4P5e+3KdmuISNiCQq1Q==
 
 symbol-tree@^3.2.2:
   version "3.2.4"
